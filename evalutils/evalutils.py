@@ -519,8 +519,11 @@ class BaseEvaluation(ABC):
         FP2s = self._case_results['FP2'].values
         FN2s = self._case_results['FN2'].values
         DSCagg2 = 2*np.sum(TP2s)/(2*np.sum(TP2s)+np.sum(FP2s)+np.sum(FN2s))
-        aggregate_results['aggregated DSC GTVp'] = {'DSCagg': DSCagg1}
-        aggregate_results['aggregated DSC GTVn'] = {'DSCagg': DSCagg2}
+        aggregate_results['AggregatedDsc'] = {'GTVp': DSCagg1,
+                        'GTVn': DSCagg2,
+                        'mean': np.mean(DSCagg1,DSCagg2),
+                        'std': np.std(DSCagg1,DSCagg2)
+        }
 
         return aggregate_results
 
