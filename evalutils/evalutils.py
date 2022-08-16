@@ -1,4 +1,3 @@
-# test
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -20,6 +19,7 @@ from warnings import warn
 
 import SimpleITK
 from pandas import DataFrame, Series, concat, merge
+import numpy as np
 
 from .exceptions import ConfigurationError, FileLoaderError, ValidationError
 from .io import (
@@ -505,11 +505,22 @@ class BaseEvaluation(ABC):
 
     def score_aggregates(self) -> Dict:
         aggregate_results = {}
-
-        for col in self._case_results.columns:
+        
+        for col in self._case_results.columns[6:]:
             aggregate_results[col] = self.aggregate_series(
                 series=self._case_results[col]
             )
+            
+        TP1s = self._case_results['TP1'].values
+        FP1s = self._case_results['FP1'].values
+        FN1s = self._case_results['FN1'].values
+        DSCagg1 = 2*np.sum(TP1s)/(2*np.sum(TP1s)+np.sum(FP1s)+np.sum(FN1s))
+        TP2s = self._case_results['TP2'].values
+        FP2s = self._case_results['FP2'].values
+        FN2s = self._case_results['FN2'].values
+        DSCagg2 = 2*np.sum(TP2s)/(2*np.sum(TP2s)+np.sum(FP2s)+np.sum(FN2s))
+        aggregate_results['aggregated DSC GTVp'] = {'DSCagg': DSCagg1}
+        aggregate_results['aggregated DSC GTVn'] = {'DSCagg': DSCagg2}
 
         return aggregate_results
 
