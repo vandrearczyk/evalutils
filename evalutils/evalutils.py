@@ -506,7 +506,7 @@ class BaseEvaluation(ABC):
     def score_aggregates(self) -> Dict:
         aggregate_results = {}
         
-        for col in self._case_results.columns[6:]:
+        for col in self._case_results.columns[4:]:
             aggregate_results[col] = self.aggregate_series(
                 series=self._case_results[col]
             )
